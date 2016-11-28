@@ -27,7 +27,7 @@ flags.DEFINE_integer('num_examples_per_epoch_for_eval', 20, 'the number of examp
 flags.DEFINE_string('tower_name', 'tower', 'multiple GPU prefix.')
 flags.DEFINE_integer('num_classes', 13, 'the number of classes.')
 flags.DEFINE_integer('num_threads', 4, 'the number of threads.')
-flags.DEFINE_boolean('fine_tune', True, 'is use pre-trained model in trained_model')
+flags.DEFINE_boolean('fine_tune', False, 'is use pre-trained model in trained_model')
 flags.DEFINE_boolean('train', True, 'train coarse parameters')
 flags.DEFINE_string('trained_model', 'trained_model', 'where to saved trained model for fine tuning.')
 flags.DEFINE_float('si_lambda', 0.5, 'rate of the scale invaliant error.')

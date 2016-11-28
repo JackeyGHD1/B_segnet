@@ -41,8 +41,8 @@ def test():
         image_input = DataSet()
         csv_train = FLAGS.train_csv
         csv_test = FLAGS.eval_csv
-        #images, depths = image_input.csv_inputs(csv_train, 2)
-        images, depths = image_input.csv_inputs_augumentation(csv_train, 2)
+        images, depths = image_input.csv_inputs(csv_train, 2)
+        #images, depths = image_input.csv_inputs_augumentation(csv_train, 2)
 
         keep_conv  = 0.8
         keep_hidden = 0.5
@@ -140,10 +140,10 @@ def train():
         csv_test = FLAGS.eval_csv
 
         image_input = DataSet()
-        #images, targets = image_input.csv_inputs(csv_train, FLAGS.batch_size)
-        #images_val, targets_val = image_input.csv_inputs(csv_test, FLAGS.num_examples)
-        images, targets = image_input.csv_inputs_augumentation(csv_train, FLAGS.batch_size)
-        images_val, targets_val = image_input.csv_inputs_augumentation(csv_test, FLAGS.num_examples)
+        images, targets = image_input.csv_inputs(csv_train, FLAGS.batch_size)
+        images_val, targets_val = image_input.csv_inputs(csv_test, FLAGS.num_examples)
+        #images, targets = image_input.csv_inputs_augumentation(csv_train, FLAGS.batch_size)
+        #images_val, targets_val = image_input.csv_inputs_augumentation(csv_test, FLAGS.num_examples)
         images_val_debug = model.debug(images_val)
         targets_val_debug = model.debug(targets_val)
 

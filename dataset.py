@@ -138,7 +138,7 @@ class DataSet:
         filename_queue = tf.train.string_input_producer([csv], shuffle=False)
         reader = tf.TextLineReader()
         _, serialized_example = reader.read(filename_queue)
-        filename, depth_filename = tf.decode_csv(serialized_example, [["path"], ["annotation"]])
+        filename, depth_filename, uncertainty_filename = tf.decode_csv(serialized_example, [["path"], ["annotation"], ["uncertainty"]])
 
         png = tf.read_file(filename)
         image = tf.image.decode_png(png, channels=3)
@@ -155,20 +155,31 @@ class DataSet:
         print depth.dtype
         #depth.set_shape([IMAGE_HEIGHT_ORG, IMAGE_WIDTH_ORG, 1])
         depth = tf.image.resize_images(depth, (DEPTH_HEIGHT, DEPTH_WIDTH))
+
+        uncertainty_png = tf.read_file(uncertainty_filename)
+        uncertainty = tf.image.decode_png(uncertainty_png, channels=1)
+        print uncertainty.dtype
+        uncertainty = tf.cast(uncertainty, tf.int64)
+        print uncertainty.dtype
+        #depth.set_shape([IMAGE_HEIGHT_ORG, IMAGE_WIDTH_ORG, 1])
+        uncertainty = tf.image.resize_images(uncertainty, (DEPTH_HEIGHT, DEPTH_WIDTH))
+
+        rgbc_image = tf.concat(2, [image, uncertainty])
+        print rgbc_image.get_shape()
  
         min_fraction_of_examples_in_queue = 0.4
         #min_fraction_of_examples_in_queue = 1
         min_queue_examples = int(example_size * min_fraction_of_examples_in_queue)
         print ('filling queue with %d train images before starting to train.  This will take a few minutes.' % min_queue_examples)
     
-        return self._generate_image_and_label_batch_pare(image, depth, min_queue_examples, example_size)
+        return self._generate_image_and_label_batch_pare(rgbc_image, depth, min_queue_examples, example_size)
 
     def csv_inputs(self, csv, batch_size):
         print csv
         filename_queue = tf.train.string_input_producer([csv], shuffle=True)
         reader = tf.TextLineReader()
         _, serialized_example = reader.read(filename_queue)
-        filename, depth_filename = tf.decode_csv(serialized_example, [["path"], ["annotation"]])
+        filename, depth_filename, uncertainty_filename = tf.decode_csv(serialized_example, [["path"], ["annotation"], ["uncertainty"]])
 
         png = tf.read_file(filename)
         image = tf.image.decode_png(png, channels=3)
@@ -185,13 +196,24 @@ class DataSet:
         print depth.dtype
         #depth.set_shape([IMAGE_HEIGHT_ORG, IMAGE_WIDTH_ORG, 1])
         depth = tf.image.resize_images(depth, (DEPTH_HEIGHT, DEPTH_WIDTH))
+
+        uncertainty_png = tf.read_file(uncertainty_filename)
+        uncertainty = tf.image.decode_png(uncertainty_png, channels=1)
+        print uncertainty.dtype
+        uncertainty = tf.cast(uncertainty, tf.int64)
+        print uncertainty.dtype
+        #depth.set_shape([IMAGE_HEIGHT_ORG, IMAGE_WIDTH_ORG, 1])
+        uncertainty = tf.image.resize_images(uncertainty, (DEPTH_HEIGHT, DEPTH_WIDTH))
+
+        rgbc_image = tf.concat(2, [image, uncertainty])
+        print rgbc_image.get_shape()
  
         min_fraction_of_examples_in_queue = 0.4
         #min_fraction_of_examples_in_queue = 1
         min_queue_examples = int(100 * min_fraction_of_examples_in_queue)
         print ('filling queue with %d train images before starting to train.  This will take a few minutes.' % min_queue_examples)
     
-        return self._generate_image_and_label_batch_pare(image, depth, min_queue_examples, batch_size)
+        return self._generate_image_and_label_batch_pare(rgbc_image, depth, min_queue_examples, batch_size)
 
     def csv_inputs_augumentation(self, csv, batch_size):
         print("trainig csv: %s" % (csv))

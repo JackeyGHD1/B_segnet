@@ -212,7 +212,7 @@ def inference_segnet_former(images, keep_conv, keep_hidden, reuse=False):
     :param reuse:
     :return: pool layer's feature map
     '''
-    en_conv1_1 = conv2d('en_conv1_1', images, [3, 3, 3, 64], [64], [1, 1, 1, 1], padding='SAME', reuse=reuse)
+    en_conv1_1 = conv2d('en_conv1_1', images, [3, 3, 4, 64], [64], [1, 1, 1, 1], padding='SAME', reuse=reuse)
     en_conv1_2 = conv2d('en_conv1_2', en_conv1_1, [3, 3, 64, 64], [64], [1, 1, 1, 1], padding='SAME', reuse=reuse)
     en_pool1 = tf.nn.max_pool(en_conv1_2, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME', name='pool1')
 

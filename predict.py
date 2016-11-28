@@ -55,7 +55,7 @@ def predict():
     keep_hidden = tf.placeholder(tf.float32)
 
     # graphのoutput
-    images_ph = tf.placeholder(tf.float32, [1, 360, 480, 3])
+    images_ph = tf.placeholder(tf.float32, [1, 360, 480, 4])
     former_output_val = model.inference_segnet_former(images_ph, keep_conv, keep_hidden)
     en_pool1 = tf.placeholder(tf.float32, [1, 180, 240, 64])
     en_pool2 = tf.placeholder(tf.float32, [1, 90, 120, 128])
@@ -134,6 +134,16 @@ def predict():
 
         pil_annot_img = Image.open(line[1])
         annot_img_array = np.asarray(pil_annot_img)
+
+        pil_uncertainty_img = Image.open(line[2])
+
+        uncertainty_img_array = np.reshape(np.asarray(pil_uncertainty_img)[:,:,0],(360,480,1))
+        print "uncertainty_img shape:"
+        print uncertainty_img_array.shape
+
+        img_array = np.concatenate((img_array, uncertainty_img_array), axis=2)
+        print "img shape:"
+        print img_array.shape
 
         print "input shape:"
         img_array = img_array[None, ...]

@@ -14,8 +14,8 @@ key, value2 = reader.read(filename_queue2)
 
 
 my_img = tf.image.decode_png(value, channels=3) # use png or jpg decoder based on your files.
-gray = tf.image.decode_png(value2, channels=3) # use png or jpg decoder based on your files.
-gray = tf.image.rgb_to_grayscale(gray)
+gray = tf.image.decode_png(value2, channels=1) # use png or jpg decoder based on your files.
+#gray = tf.image.rgb_to_grayscale(gray)
 #my_img = tf.cast(my_img, tf.float32)
 #my_img.set_shape([200, 200, 3])
 #my_img = tf.random_crop(my_img, [200,400,3])
